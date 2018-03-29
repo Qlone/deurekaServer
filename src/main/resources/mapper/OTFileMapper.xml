@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qlone.deureka.login.server.dao.UserDataMapper">
+    <!--插入新的用户-->
+    <insert id="insertUser" parameterType="com.qlone.deureka.login.server.dto.UserDataDTO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+
+        insert into user_data (
+          account,
+          password,
+          mail
+        ) VALUES (
+          #{account},
+          #{password},
+          #{mail}
+        )
+    </insert>
+    <!--查询用户账号是否存在-->
+    <select id="queryUserAccount" parameterType="com.qlone.deureka.login.server.dto.UserDataDTO" resultType="com.qlone.deureka.login.server.dto.UserDataDTO">
+        SELECT id
+        FROM user_data
+        WHERE account = #{account}
+        LIMIT 0,1;
+    </select>
+    <!--检测账号登陆-->
+    <select id="checkAccountAndPsw" parameterType="com.qlone.deureka.login.server.dto.UserDataDTO" resultType="com.qlone.deureka.login.server.dto.UserDataDTO">
+        SELECT id,
+               mail,
+               flag
+
+        FROM user_data
+        WHERE account = #{account}
+        AND password = #{password}
+        LIMIT 0,1
+    </select>
+
+</mapper>
