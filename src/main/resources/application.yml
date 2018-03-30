@@ -2,7 +2,7 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://www.miss-rabbit.cc:8082/eureka/
+      defaultZone: http://cloud.miss-rabbit.cc:8082/eureka/
 
 
 server:
@@ -26,6 +26,9 @@ spring:
     port: 6379
     password: 4hs82j!k
     timeout: 600000s
+
+
 mybatis:
   type-aliases-package: com.qlone.**.dto
   mapper-locations: classpath:/mapper/*.xml
+

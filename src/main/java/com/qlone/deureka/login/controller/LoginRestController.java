@@ -18,7 +18,7 @@ public class LoginRestController{
     public Object loginAndGetToken(@RequestParam(value = "account",defaultValue = "") String account,
                                    @RequestParam(value = "psw",defaultValue = "") String password,
                                    @RequestParam(value = "flag",defaultValue = "false") boolean muiltylogin) {
-        return userDataService.loginAndGetToken("",password,muiltylogin);
+        return userDataService.loginAndGetToken(account,password,muiltylogin);
     }
 
     @RequestMapping(value = "/check",produces =  { "application/json;charset=UTF-8" })
@@ -26,8 +26,9 @@ public class LoginRestController{
         return userDataService.checkToken(token);
     }
 
-
-    public Object registerAccount(String account, String psw) {
-        return null;
+    @RequestMapping(value = "/register",produces =  { "application/json;charset=UTF-8" })
+    public Object registerAccount(@RequestParam(value = "account",defaultValue = "") String account,
+                                  @RequestParam(value = "psw",defaultValue = "") String password) {
+        return userDataService.registerAccount(account, password);
     }
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qlone.deureka.label.server.dao.LabelMapperDAO">
+    <insert id="insertLabel" parameterType="com.qlone.deureka.label.server.dto.TypeDTO">
+        <selectKey  keyProperty="idType" resultType="java.lang.String" order="BEFORE">
+                    select  REPLACE(UUID(),'-','')
+        </selectKey>
+
+        INSERT INTO type(
+          id_type,
+          id_user,
+          type,
+          created_date
+        ) VALUES (
+          #{idType},
+          #{idUser},
+          #{type},
+          now()
+        )ON DUPLICATE KEY UPDATE  id_user = #{idUser} , type = #{type}
+    </insert>
+</mapper>
