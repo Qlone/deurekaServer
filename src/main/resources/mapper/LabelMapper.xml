@@ -18,4 +18,23 @@
           now()
         )ON DUPLICATE KEY UPDATE  id_user = #{idUser} , type = #{type}
     </insert>
+
+    <delete id="deleteLabel" parameterType="com.qlone.deureka.label.server.dto.TypeDTO">
+        DELETE FROM type
+        WHERE id_user = #{idUser}
+        AND type = #{type}
+    </delete>
+
+    <select id="queryLable" parameterType="com.qlone.deureka.label.server.dto.TypeDTO"
+            resultType="com.qlone.deureka.label.server.dto.TypeDTO">
+        SELECT
+            id_type,
+            id_user,
+            type,
+            created_date
+        FROM type
+        WHERE id_user = #{idUser}
+        ORDER BY created_date DESC
+
+    </select>
 </mapper>

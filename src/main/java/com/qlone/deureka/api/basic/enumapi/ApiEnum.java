@@ -10,6 +10,7 @@ public enum ApiEnum implements Serializable{
     USER_SUCCESS("200","操作成功"),
     USER_FAIL("201","操作失败"),
     USER_PARAMTER_FAIL("202","缺少参数"),
+    USER_ILLEGEL("203","参数不合法"),
 
     USER_ACCOUNT_EXSITS("10001","账号已经存在");
     ;

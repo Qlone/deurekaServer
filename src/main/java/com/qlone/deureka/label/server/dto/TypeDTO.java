@@ -1,17 +1,19 @@
 package com.qlone.deureka.label.server.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 
 public class TypeDTO {
-    
+    @JsonIgnore
     private String idType;
-    
+    @JsonIgnore
     private String idUser;
     /**
      * 标签名字
      */
     private String type;
-    
+    @JsonIgnore
     private Date createdDate;
 
     public String getIdType() {

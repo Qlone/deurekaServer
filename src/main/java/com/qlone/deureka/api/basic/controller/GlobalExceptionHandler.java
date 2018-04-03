@@ -15,7 +15,6 @@ public class GlobalExceptionHandler {
     /**
      * 系统异常处理，比如：404,500
      * @param req
-     * @param resp
      * @param e
      * @return
      * @throws Exception
@@ -28,6 +27,7 @@ public class GlobalExceptionHandler {
         if (e instanceof org.springframework.web.servlet.NoHandlerFoundException) {
             return ApiEnum.userResult(ApiEnum.API_404,"");
         } else {
+            logger.error("msg",e);
             return ApiEnum.userResult(ApiEnum.API_500,"");
         }
 

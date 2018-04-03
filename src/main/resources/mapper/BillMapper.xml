@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qlone.deureka.bill.server.dao.BillMapper">
+    <insert id="insertOrUpdateBill" parameterType="com.qlone.deureka.bill.server.dto.BillDTO">
+        <selectKey  keyProperty="idBill" resultType="java.lang.String" order="BEFORE">
+            select  REPLACE(UUID(),'-','')
+        </selectKey>
+        INSERT INTO bill(
+          id_bill,
+          id_user,
+          type,
+          money,
+          created_date
+        )VALUES(
+          #{idBill},
+          #{idUser},
+          #{type},
+          #{money},
+          #{datetime}
+        )ON DUPLICATE KEY UPDATE id_bill = #{idBill}
+
+    </insert>
+
+    <select id="queryBill" parameterType="com.qlone.deureka.bill.server.dto.BillDTO"
+            resultType="com.qlone.deureka.bill.server.dto.BillDTO">
+        SELECT
+            id_bill,
+            type,
+            money,
+            created_date datetime
+        FROM bill
+        WHERE id_user = #{idUser}
+    </select>
+
+    <select id="countBillByType" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+         SELECT
+             count(money) total
+         FROM bill
+         WHERE id_user = #{idUser}
+              <!-- 类型 -->
+              <foreach collection="type" index="item">
+                  AND type like CONCAT('%{', #{item}, '}%')
+              </foreach>
+              <!-- 收入或支出 -->
+              <choose>
+                  <when test="income">
+                      AND money &gt;= 0
+                  </when>
+                  <otherwise>
+                      AND money &lt;= 0
+                  </otherwise>
+              </choose>
+
+                <if test="minCreateTime != null and  minCreateTime != ''">
+                    <![CDATA[ and created_date >= to_date(#{minCreateTime,jdbcType=DATE},'yyyy-MM-dd hh24:mi:ss')]]>
+                </if>
+                <if test="maxCreateTime != null and  maxCreateTime != ''">
+                    <![CDATA[ and created_date <= to_date(#{maxCreateTime,jdbcType=DATE},'yyyy-MM-dd hh24:mi:ss')]]>
+                </if>
+    </select>
+</mapper>
