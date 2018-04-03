@@ -24,7 +24,7 @@
     <select id="queryBill" parameterType="com.qlone.deureka.bill.server.dto.BillDTO"
             resultType="com.qlone.deureka.bill.server.dto.BillDTO">
         SELECT
-            id_bill,
+            id_bill idBill,
             type,
             money,
             created_date datetime
@@ -34,28 +34,37 @@
 
     <select id="countBillByType" parameterType="java.util.HashMap" resultType="java.util.HashMap">
          SELECT
-             count(money) total
+              SUM(money) total
          FROM bill
          WHERE id_user = #{idUser}
               <!-- 类型 -->
-              <foreach collection="type" index="item">
-                  AND type like CONCAT('%{', #{item}, '}%')
-              </foreach>
-              <!-- 收入或支出 -->
-              <choose>
-                  <when test="income">
-                      AND money &gt;= 0
-                  </when>
-                  <otherwise>
-                      AND money &lt;= 0
-                  </otherwise>
-              </choose>
+              <if test="type != null">
+                  <foreach collection="type" item="item" >
+                      AND type like CONCAT('%{',#{item}, '}%')
+                  </foreach>
 
-                <if test="minCreateTime != null and  minCreateTime != ''">
-                    <![CDATA[ and created_date >= to_date(#{minCreateTime,jdbcType=DATE},'yyyy-MM-dd hh24:mi:ss')]]>
-                </if>
-                <if test="maxCreateTime != null and  maxCreateTime != ''">
-                    <![CDATA[ and created_date <= to_date(#{maxCreateTime,jdbcType=DATE},'yyyy-MM-dd hh24:mi:ss')]]>
-                </if>
+              </if>
+              <!-- 收入或支出 -->
+              <if test="income != null">
+
+                  <choose>
+                      <when test="income == 'true'">
+                          AND money &gt;= 0
+                      </when>
+                      <otherwise>
+                          AND money &lt;= 0
+                      </otherwise>
+                  </choose>
+              </if>
+              <if test="minCreateTime != null and  maxCreateTime != null">
+                  AND unix_timestamp( created_date ) between unix_timestamp(#{minCreateTime}) and unix_timestamp(#{maxCreateTime})
+              </if>
+
     </select>
+
+    <delete id="deleteBill" parameterType="com.qlone.deureka.bill.server.dto.BillDTO">
+        DELETE FROM bill
+        WHERE id_user = #{idUser}
+        AND id_bill = #{idBill}
+    </delete>
 </mapper>

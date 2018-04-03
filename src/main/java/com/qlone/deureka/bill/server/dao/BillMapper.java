@@ -2,7 +2,6 @@ package com.qlone.deureka.bill.server.dao;
 
 import com.qlone.deureka.bill.server.dto.BillDTO;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,5 +21,9 @@ public interface BillMapper {
     /**
      * 统计功能
      */
-    HashMap<String,Object> countBillByType(String userid, String[] type, boolean income, Date minCreateTime,Date maxCreateTime);
+    HashMap<String,Object> countBillByType(HashMap<String,Object> param);
+    /**
+     * 删除账单
+     */
+    int deleteBill(BillDTO billDTO);
 }

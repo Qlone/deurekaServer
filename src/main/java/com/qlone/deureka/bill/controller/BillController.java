@@ -1,6 +1,6 @@
 package com.qlone.deureka.bill.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.github.pagehelper.PageHelper;
 import com.qlone.deureka.bill.server.dto.BillDTO;
 import com.qlone.deureka.bill.server.service.BillService;
@@ -43,4 +43,24 @@ public class BillController {
         PageHelper.startPage(pageNum,pageSize);
         return billService.queryBill(token,new BillDTO());
     }
+    @RequestMapping(value = "/total",produces =  { "application/json;charset=UTF-8" })
+    public Object totalBill(@RequestParam(value = "token") String token){
+        return billService.selectTotalBill(token);
+    }
+
+    @RequestMapping(value = "/multi",produces =  { "application/json;charset=UTF-8" })
+    public Object multiBill(@RequestParam(value = "token") String token,
+                            @RequestParam(value = "type" ,required = false) String[] type,
+                            @RequestParam(value = "income",required = false) String income,
+                            @RequestParam(value = "minDate",required = false) Date minDate,
+                            @RequestParam(value = "maxDate",required = false) Date maxDate){
+        return billService.multiSearchBill(token,type,income,minDate,maxDate);
+    }
+
+    @RequestMapping(value = "/delete",produces =  { "application/json;charset=UTF-8" })
+    public Object deleteBill(@RequestParam(value = "token") String token,
+                             @RequestParam(value = "id") String idBill){
+        return billService.deleteBill(token,idBill);
+    }
+
 }
