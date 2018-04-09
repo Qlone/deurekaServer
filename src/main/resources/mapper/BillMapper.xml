@@ -30,6 +30,7 @@
             created_date datetime
         FROM bill
         WHERE id_user = #{idUser}
+        ORDER BY created_date desc
     </select>
 
     <select id="countBillByType" parameterType="java.util.HashMap" resultType="java.util.HashMap">
