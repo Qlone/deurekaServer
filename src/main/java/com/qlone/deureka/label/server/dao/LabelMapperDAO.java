@@ -25,4 +25,11 @@ public interface LabelMapperDAO {
      * @return
      */
     List<TypeDTO> queryLable(TypeDTO typeDTO);
+
+    /**
+     * 计数增加
+     * @param typeDTO
+     * @return
+     */
+    int addLabelCount(TypeDTO typeDTO);
 }

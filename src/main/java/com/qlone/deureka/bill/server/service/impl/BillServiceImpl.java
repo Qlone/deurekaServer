@@ -7,6 +7,8 @@ import com.qlone.deureka.bill.code.BillEnum;
 import com.qlone.deureka.bill.server.dao.BillMapper;
 import com.qlone.deureka.bill.server.dto.BillDTO;
 import com.qlone.deureka.bill.server.service.BillService;
+import com.qlone.deureka.label.server.dao.LabelMapperDAO;
+import com.qlone.deureka.label.server.dto.TypeDTO;
 import com.qlone.deureka.login.server.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,13 +21,30 @@ import java.util.List;
 public class BillServiceImpl implements BillService {
     @Autowired
     BillMapper billMapper;
+    @Autowired
+    LabelMapperDAO labelMapperDAO;
     @Override
     @ParseToken
     public ApiResult<BillEnum, String> insertBill(String token, BillDTO billDTO) {
-        String userId = TokenUtil.getValue(token);
+        final String userId = TokenUtil.getValue(token);
         billDTO.setIdUser(userId);
 
         int res = billMapper.insertOrUpdateBill(billDTO);
+        /**
+         * 计数增加
+         */
+        final String[] types = billDTO.getType().replaceAll("[{]","")
+                .replaceAll("}","")
+                .split(",");
+        new Thread(() -> {
+            TypeDTO typeDTO = new TypeDTO();
+            typeDTO.setIdUser(userId);
+            for(String t:types){
+                typeDTO.setType(t);
+                labelMapperDAO.addLabelCount(typeDTO);
+            }
+        }).start();
+
 
         return res > 0 ? EnumFactory.resultBill(BillEnum.SUCCESS,billDTO.getIdBill())
                 : EnumFactory.resultBill(BillEnum.FAIL,"");

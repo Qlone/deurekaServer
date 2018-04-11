@@ -32,9 +32,13 @@
             id_user,
             type,
             created_date
-        FROM type
+        FROM type t
         WHERE id_user = #{idUser}
-        ORDER BY created_date DESC
-
+        ORDER BY t.count DESC , created_date DESC
     </select>
+    <update id="addLabelCount">
+      UPDATE type t SET t.count = t.count + 1
+      WHERE t.type = #{type}
+        AND id_user = #{idUser}
+    </update>
 </mapper>

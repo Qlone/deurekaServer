@@ -54,6 +54,7 @@ public class LabelServiceImpl implements LabelService {
             List<TypeDTO> res = labelMapperDAO.queryLable(typeDTO);
             return LabelEnum.result(LabelEnum.SUCCESS,res);
         }catch (Exception e){
+            logger.error("error",e);
             return LabelEnum.result(LabelEnum.FAIL,"");
         }
     }
